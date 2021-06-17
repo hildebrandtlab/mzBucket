@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
             ("s, sqrt", "if true, sqrt norm will be used", cxxopts::value<std::string>()->default_value("false"))
             ("t, threads", "number of threads", cxxopts::value<int>()->default_value("4"))
             ("r, restricted", "whether collision is restricted", cxxopts::value<std::string>()->default_value("false"))
+            ("v, verbose", "whether output should be verbose", cxxopts::value<std::string>()->default_value("true"))
             ("h, help", "Print usage");
 
     auto result = options.parse(argc, argv);
@@ -54,6 +55,7 @@ int main(int argc, char *argv[]) {
     std::string normalizeS = result["normalize"].as<std::string>();
     std::string sqrtS = result["sqrt"].as<std::string>();
     std::string restrictedS = result["restricted"].as<std::string>();
+    std::string verboseS = result["verbose"].as<std::string>();
     int k = result["AND"].as<int>();
     int l = result["OR"].as<int>();
     int numThreads = result["threads"].as<int>();
@@ -62,6 +64,7 @@ int main(int argc, char *argv[]) {
     bool normalize = false;
     bool sqrt = false;
     bool restricted = false;
+    bool verbose = false;
 
     if(overlappingS == "true")
         overlapping = true;
@@ -75,27 +78,33 @@ int main(int argc, char *argv[]) {
     if(restrictedS == "true")
         restricted = true;
 
+    if(verboseS == "true")
+        verbose = true;
+
     bool isTestCase = false;
 
     if(result.count("csvPath"))
         isTestCase = true;
 
-    std::cout << "LSH SETTINGS: " << std::endl;
-    std::cout << "______________________________" << std::endl;
-    std::cout << "window length(dalton): " << windowlength << std::endl;
-    std::cout << "windows overlap      : " << overlappingS << std::endl;
-    std::cout << "number of ANDs       : " << k << std::endl;
-    std::cout << "number of ORs        : " << l << std::endl;
-    std::cout << "normalize intensities: " << normalizeS << std::endl;
-    if (normalize)
-        if(sqrt)
-            std::cout << "normalize function   : " << "SQRT" << std::endl;
-        else
-            std::cout << "normalize function   : " << "LOG" << std::endl;
 
-    std::cout << "collision restricted : " << restrictedS << std::endl;
-    std::cout << "______________________________" << std::endl;
-    std::cout << "" << std::endl;
+    if(verbose){
+        std::cout << "LSH SETTINGS: " << std::endl;
+        std::cout << "______________________________" << std::endl;
+        std::cout << "window length(dalton): " << windowlength << std::endl;
+        std::cout << "windows overlap      : " << overlappingS << std::endl;
+        std::cout << "number of ANDs       : " << k << std::endl;
+        std::cout << "number of ORs        : " << l << std::endl;
+        std::cout << "normalize intensities: " << normalizeS << std::endl;
+        if (normalize)
+            if(sqrt)
+                std::cout << "normalize function   : " << "SQRT" << std::endl;
+            else
+                std::cout << "normalize function   : " << "LOG" << std::endl;
+
+        std::cout << "collision restricted : " << restrictedS << std::endl;
+        std::cout << "______________________________" << std::endl;
+        std::cout << "" << std::endl;
+    }
 
     // test mode read data from csv
     if(isTestCase){
@@ -196,8 +205,15 @@ int main(int argc, char *argv[]) {
                fCounter += 1;
        }
 
-       std::cout << "Real True: " << tCounterReal << " | Real False: " << fCounterReal << std::endl;
-       std::cout << "Pred True: " << tCounter << " | Pred False: " << fCounter << std::endl;
+       if(verbose){
+           std::cout << "Real True: " << tCounterReal << " | Real False: " << fCounterReal << std::endl;
+           std::cout << "Pred True: " << tCounter << " | Pred False: " << fCounter << std::endl;
+       }
+
+       else {
+           std::cout << tCounterReal << " " << fCounterReal << " " << tCounter << " " << fCounter << std::endl;
+           std::cout << "//" << "tCounterReal" << " " << "fCounterReal" << " " << "tCounter" << " " << "fCounter" << std::endl;
+       }
    }
    else{
 
