@@ -14,7 +14,7 @@
 
 int main(int argc, char *argv[]) {
 
-    cxxopts::Options options("timsLSH", "Fast Cosim-Hashes for TimsTOF Spectra");
+    cxxopts::Options options("mzBucket", "Fast Cosim-Hashes for TimsTOF Spectra");
     options.add_options()
         ("f,frameId", "frame number", cxxopts::value<int>()->default_value("1"))
             ("w, windowlength", "length of subspectra(da)", cxxopts::value<double>()->default_value("10"))
