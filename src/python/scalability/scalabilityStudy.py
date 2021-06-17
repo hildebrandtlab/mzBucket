@@ -21,9 +21,7 @@ with open("{}_tmp".format(outfile), 'a') as the_file:
     the_file.write('numThreads,runTime,l,k\n')
 
 # run parameters
-#numThreads = [1,2,4,8,16,32,64]#,128]
 numThreads = [2,4,8,16,32,64,88]
-#numThreads = [128]
 ampParameters = [(30,64),(30,30),(30,22)]
 
 # store results
@@ -42,11 +40,8 @@ for nt in np.flip(numThreads):
         with open("{}_tmp".format(outfile), 'a') as the_file:
             the_file.write('{},{},{},{}\n'.format(nt,duration,l,k))
 
-
 df = pd.DataFrame.from_dict({'numThreads':threadsUsed,'runTimeSec':runTime,'k':kList,'l':lList})
-
 df.to_csv(outfile)
-
 print(df)
 
 
