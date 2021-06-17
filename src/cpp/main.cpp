@@ -14,10 +14,10 @@
 
 int main(int argc, char *argv[]) {
 
-    cxxopts::Options options("timsLSH", "hash ALL THE SPECTRA, FAST!");
+    cxxopts::Options options("timsLSH", "Fast Cosim-Hashes for TimsTOF Spectra");
     options.add_options()
         ("f,frameId", "frame number", cxxopts::value<int>()->default_value("1"))
-            ("w, windowlength", "length of subspectra", cxxopts::value<double>()->default_value("10"))
+            ("w, windowlength", "length of subspectra(da)", cxxopts::value<double>()->default_value("10"))
             ("o, overlapping", "whether windows overlap", cxxopts::value<std::string>()->default_value("true"))
             ("k, OR", "number of ORs", cxxopts::value<int>())
             ("l, AND", "number of ANDs", cxxopts::value<int>())
@@ -75,6 +75,7 @@ int main(int argc, char *argv[]) {
         isTestCase = true;
 
     std::cout << "LSH SETTINGS: " << std::endl;
+    std::cout << "______________________________" << std::endl;
     std::cout << "window length(dalton): " << windowlength << std::endl;
     std::cout << "windows overlap      : " << overlappingS << std::endl;
     std::cout << "number of ANDs       : " << k << std::endl;
