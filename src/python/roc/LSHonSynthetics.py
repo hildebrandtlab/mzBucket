@@ -17,7 +17,7 @@ def run(l,k):
 outfile = sys.argv[1]
 
 # run parameters
-ampParameters = [(30,64),(30,30),(30,22)]
+ampParameters = [(30,22)]
 
 # store results
 runTime = []
