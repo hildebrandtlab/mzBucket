@@ -82,7 +82,7 @@ for m in tqdm(np.arange(150,5000,10)):
                 scan +=1 
 
 
-df_reference = pd.DataFrame.from_dict({'scan':scanList,'mz':xList,'i':yList,'z':zList,'mzMono':monoList,'label':labelList})
+df_reference = pd.DataFrame.from_dict({'scan':scanList,'mz':xList,'i':yList,'label':labelList})
 
-df_reference.to_csv(outFile)
+df_reference.to_csv(outFile,index=False)
 
