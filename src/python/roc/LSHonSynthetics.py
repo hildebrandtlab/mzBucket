@@ -7,10 +7,9 @@ import sys
 def run(l,k):
     start = time.time()
     # ./mzBucket -f 1 -k 20 -l 20 -c synthetics.csv -t 32
-    runCommand = ["/share/massSpec/syntheticsLSH/mzBucket","-f","1","-k","{}".format(k),"-l","{}".format(l),"-c","/share/massSpec/syntheticsLSH/synthetics.csv","-t","16"]
-    print(runCommand)
+    runCommand = ["/share/massSpec/syntheticsLSH/mzBucket","-f","1","-k","{}".format(k),"-l","{}".format(l),"-c","/share/massSpec/syntheticsLSH/synthetics.csv","-t","16","-v","false"]
+    print("// {}".format(runCommand))
     res = subprocess.run(runCommand)
-    print(res)
     return res
 
 # outFile
