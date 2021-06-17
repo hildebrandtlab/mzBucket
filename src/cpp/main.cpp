@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        auto checkSet = getHashes(specMap, numThreads, windowlength, overlapping, l, k, normalize, sqrt, restricted);
+        auto checkSet = getHashes(specMap, numThreads, windowlength, overlapping, l, k, normalize, sqrt, restricted, verbose);
 
         for(auto peak_id = 0; peak_id < mzs.size(); peak_id++){
 
@@ -257,7 +257,7 @@ int main(int argc, char *argv[]) {
            }
        }
 
-       auto checkSet = getHashes(specMap, numThreads, windowlength, overlapping, l, k, normalize, sqrt, restricted);
+       auto checkSet = getHashes(specMap, numThreads, windowlength, overlapping, l, k, normalize, sqrt, restricted, verbose);
 
        std::vector<double> mzValues;
        std::vector<int> intens;

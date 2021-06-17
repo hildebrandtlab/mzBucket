@@ -164,7 +164,7 @@ bool containsKeyMultiple(const std::vector<int>& keys, const std::map<int, bool>
  * @param l
  */
 std::map<int, std::set<int>> getHashes(const std::map<int, MzSpectrum>& specMap, int numThreads, double windowLength,
-                                       bool overlapping, int k, int l, bool normalize, bool sqr, bool restricted) {
+                                       bool overlapping, int k, int l, bool normalize, bool sqr, bool restricted, bool verbose) {
     std::vector<std::pair<int, MzSpectrum>> mzSpectra;
     mzSpectra.reserve(specMap.size());
 
@@ -199,7 +199,9 @@ std::map<int, std::set<int>> getHashes(const std::map<int, MzSpectrum>& specMap,
     for(const auto& [key, value]: specMap){
         mzSpectra.push_back({key, value});
     }
-    std::cout << "Number of spectra: " << mzSpectra.size() << std::endl;
+
+    if(verbose)
+        std::cout << "Number of spectra: " << mzSpectra.size() << std::endl;
 
     // binning
     #pragma omp parallel for num_threads(numThreads)
@@ -219,7 +221,9 @@ std::map<int, std::set<int>> getHashes(const std::map<int, MzSpectrum>& specMap,
     for(const auto& [scan, windows]: binnedWindows){
         windowCounter += windows.size();
     }
-    std::cout << "Number of windows: " << windowCounter << std::endl;
+
+    if(verbose)
+        std::cout << "Number of windows: " << windowCounter << std::endl;
 
     // window vectorization
     #pragma omp parallel for num_threads(numThreads)
@@ -245,11 +249,13 @@ std::map<int, std::set<int>> getHashes(const std::map<int, MzSpectrum>& specMap,
         vectorizedWindowsEigen[i] = {vectorizedWindows[i].first, tmpVec};
     }
 
-    std::cout << "______________________________" << std::endl;
-    std::cout << "" << std::endl;
+    if(verbose){
+        std::cout << "______________________________" << std::endl;
+        std::cout << "" << std::endl;
 
-    std::cout << "Starting LSH." << std::endl;
-    std::cout << "______________________________" << std::endl;
+        std::cout << "Starting LSH." << std::endl;
+        std::cout << "______________________________" << std::endl;
+    }
 
     // key generation
     #pragma omp parallel for num_threads(numThreads)
@@ -274,8 +280,10 @@ std::map<int, std::set<int>> getHashes(const std::map<int, MzSpectrum>& specMap,
         }
     }
 
-    std::cout << "Number of keys       : " << keyCounter << std::endl;
-    std::cout << "Number of unique keys: " << keySet.size() << std::endl;
+    if(verbose){
+        std::cout << "Number of keys       : " << keyCounter << std::endl;
+        std::cout << "Number of unique keys: " << keySet.size() << std::endl;
+    }
 
     std::map<int, bool> filterMap;
 
