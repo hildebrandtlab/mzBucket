@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
             ("n, normalize", "if true, norm(I) will be used", cxxopts::value<std::string>()->default_value("false"))
             ("s, sqrt", "if true, sqrt norm will be used", cxxopts::value<std::string>()->default_value("false"))
             ("t, threads", "number of threads", cxxopts::value<int>()->default_value("4"))
+            ("r, restricted", "whether collision is restricted", cxxopts::value<std::string>()->default_value("false"))
             ("h, help", "Print usage");
 
     auto result = options.parse(argc, argv);
@@ -52,6 +53,7 @@ int main(int argc, char *argv[]) {
     std::string overlappingS = result["overlapping"].as<std::string>();
     std::string normalizeS = result["normalize"].as<std::string>();
     std::string sqrtS = result["sqrt"].as<std::string>();
+    std::string restrictedS = result["restricted"].as<std::string>();
     int k = result["AND"].as<int>();
     int l = result["OR"].as<int>();
     int numThreads = result["threads"].as<int>();
@@ -59,6 +61,7 @@ int main(int argc, char *argv[]) {
     bool overlapping = false;
     bool normalize = false;
     bool sqrt = false;
+    bool restricted = false;
 
     if(overlappingS == "true")
         overlapping = true;
@@ -68,6 +71,9 @@ int main(int argc, char *argv[]) {
 
     if(sqrtS == "true")
         sqrt = true;
+
+    if(restrictedS == "true")
+        restricted = true;
 
     bool isTestCase = false;
 
@@ -81,13 +87,13 @@ int main(int argc, char *argv[]) {
     std::cout << "number of ANDs       : " << k << std::endl;
     std::cout << "number of ORs        : " << l << std::endl;
     std::cout << "normalize intensities: " << normalizeS << std::endl;
-
     if (normalize)
         if(sqrt)
             std::cout << "normalize function   : " << "SQRT" << std::endl;
         else
             std::cout << "normalize function   : " << "LOG" << std::endl;
 
+    std::cout << "collision restricted : " << restrictedS << std::endl;
     std::cout << "______________________________" << std::endl;
     std::cout << "" << std::endl;
 
@@ -151,7 +157,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        auto checkSet = getHashes(specMap, numThreads, windowlength, overlapping, k, l, normalize, sqrt);
+        auto checkSet = getHashes(specMap, numThreads, windowlength, overlapping, k, l, normalize, sqrt, restricted);
 
         for(auto peak_id = 0; peak_id < mzs.size(); peak_id++){
 
@@ -235,7 +241,7 @@ int main(int argc, char *argv[]) {
            }
        }
 
-       auto checkSet = getHashes(specMap, numThreads, windowlength, overlapping, k, l, normalize, sqrt);
+       auto checkSet = getHashes(specMap, numThreads, windowlength, overlapping, k, l, normalize, sqrt, restricted);
 
        std::vector<double> mzValues;
        std::vector<int> intens;

@@ -45,10 +45,14 @@ Eigen::SparseVector<double> toSparseVector(const MzVector& mzVector, int numRows
  * @param boolVector vector to create bit string from
  * @return bit string
  */
-std::string boolVectorToString(const std::vector<bool> &boolVector){
+std::string boolVectorToString(const std::vector<bool> &boolVector, int bin, bool restricted){
     std::string ret = "";
     for(const auto& b: boolVector)
         b ? ret.append("1") : ret.append("0");
+
+    if(restricted)
+        ret.append(std::to_string(bin));
+
     return ret;
 }
 
@@ -58,12 +62,12 @@ std::string boolVectorToString(const std::vector<bool> &boolVector){
  * @param hashes set of bool vectors representing the result from lsh probing
  * @return a set of ints representing the keyspace of a given mz spectrum or window
  */
-std::vector<int> calculateKeys(const std::vector<std::vector<bool>> &hashes){
+std::vector<int> calculateKeys(const std::vector<std::vector<bool>> &hashes, int bin, bool restricted){
     std::vector<int> retVec;
     retVec.reserve(hashes.size());
     for(const auto& h: hashes){
-        const auto bitString = boolVectorToString(h);
-        int hash = std::hash<std::string>{}(boolVectorToString(h));
+        // const auto bitString = boolVectorToString(h, bin, restricted);
+        int hash = std::hash<std::string>{}(boolVectorToString(h, bin, restricted));
         retVec.push_back(hash);
     }
     return retVec;
@@ -159,7 +163,8 @@ bool containsKeyMultiple(const std::vector<int>& keys, const std::map<int, bool>
  * @param k
  * @param l
  */
-std::map<int, std::set<int>> getHashes(const std::map<int, MzSpectrum>& specMap, int numThreads, double windowLength, bool overlapping, int k, int l, bool normalize, bool sqr) {
+std::map<int, std::set<int>> getHashes(const std::map<int, MzSpectrum>& specMap, int numThreads, double windowLength,
+                                       bool overlapping, int k, int l, bool normalize, bool sqr, bool restricted) {
     std::vector<std::pair<int, MzSpectrum>> mzSpectra;
     mzSpectra.reserve(specMap.size());
 
@@ -252,7 +257,7 @@ std::map<int, std::set<int>> getHashes(const std::map<int, MzSpectrum>& specMap,
 
         std::map<int, std::vector<int>> tmpVec;
         for(const auto& [first, second]: vectorizedWindowsEigen[i].second){
-            tmpVec[first] = calculateKeys(calculateSignumVector(second, M, k, l));
+            tmpVec[first] = calculateKeys(calculateSignumVector(second, M, k, l), first, restricted);
         }
 
         hashKeys[i] = {vectorizedWindowsEigen[i].first, tmpVec};
