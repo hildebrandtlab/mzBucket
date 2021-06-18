@@ -25,15 +25,15 @@ for m in tqdm(np.arange(150,5000,10)):
     for z in np.arange(1,5):
         if m/z > 150 and m/z < 1999:
             # signal
-            tuples = lib.createReferenceBinnedSparse(m,z,1000,10.,1,0.01)
+            signal = lib.createReferenceBinnedSparse(m,z,1000,10.,1,0.01)
             
             # label
-            tuples = [ (mz,i,True) for (mz,i) in tuples]
+            signalLabeled = [ (mz,i,True) for (mz,i) in signal]
 
-            if len(tuples) > 0:
+            if len(signal) > 0:
                 for count in range(3):
                     # modulate signal
-                    tuples = [ (mz,i*relInt[count],l) for (mz,i,l) in tuples]
+                    signalMod = [ (mz,i*relInt[count],l) for (mz,i,l) in signalLabeled]
 
                     # adding noise 
                     noise = lib.createNoiseBinnedSparse(m,z,1000,10.,1,0.01)
@@ -42,15 +42,15 @@ for m in tqdm(np.arange(150,5000,10)):
                     noise = [(mz,i,False) for (mz,i) in noise]
                     #noise = [(mz,i,True) for (mz,i) in noise]
                     # concat lists
-                    tuples += noise
+                    signalMod += noise
                     
                     # group by 
                     grouped = []
                     
-                    for mzKey, values in groupby(tuples, lambda x: x[0]):
+                    for mzKey, values in groupby(signalMod, lambda x: int(1000*x[0])):
                         listVal = list(values)                                             
                         grouped.append(\
-                                (mzKey,\
+                                (float(mzKey/1000),\
                                 reduce(lambda i1, i2: i1 + i2, [ i for (mz,i,l) in listVal]),\
                                 reduce(lambda lab1, lab2: lab1 or lab2, [ l for (mz,i,l) in listVal]))\
                                 )
@@ -71,8 +71,8 @@ for m in tqdm(np.arange(150,5000,10)):
                     scan +=1 
             for count in range(10):
                 # noise 
-                tuples = lib.createNoiseBinnedSparse(m,z,1000,10.,1,0.01)
-                for (mz,i) in tuples:
+                noise = lib.createNoiseBinnedSparse(m,z,1000,10.,1,0.01)
+                for (mz,i) in noise:
                     if mz > 150 and mz < 1999:
                       xList.append(mz)
                       yList.append(i)

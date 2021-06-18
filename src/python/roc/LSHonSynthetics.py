@@ -9,7 +9,7 @@ from tqdm import tqdm
 def run(l,k):
     start = time.time()
     # ./mzBucket -f 1 -k 20 -l 20 -c synthetics.csv -t 32
-    runCommand = ["../../cpp/mzBucket","-f","1","-k","{}".format(k),"-l","{}".format(l),"-c","../../../data/synthetics.csv","-t","32","-v","false","-r","false","-w","10"]
+    runCommand = ["../../../bin/mzBucket","-f","1","-k","{}".format(k),"-l","{}".format(l),"-c","../../../data/synthetics.csv","-t","32","-v","false","-r","false","-w","10"]
     #print("// {}".format(runCommand))
     res = str(sp.check_output(runCommand))
     #print("res {}".format(res))
