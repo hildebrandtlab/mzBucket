@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
     if(verbose){
         std::cout << "LSH SETTINGS: " << std::endl;
         std::cout << "______________________________" << std::endl;
-        std::cout << "window length(dalton): " << windowlength << std::endl;
+        std::cout << "window length(dalton): " << windowLength << std::endl;
         std::cout << "windows overlap      : " << overlappingS << std::endl;
         std::cout << "number of ANDs       : " << k << std::endl;
         std::cout << "number of ORs        : " << l << std::endl;
