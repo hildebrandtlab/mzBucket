@@ -23,7 +23,7 @@ relInt = [0.5,1,0.5]
 scan = 0
 for m in tqdm(np.arange(150,5000,10)):
     for z in np.arange(1,5):
-        if m/z > 150 and m/z < 2000.:
+        if m/z > 150 and m/z < 1999:
             # signal
             tuples = lib.createReferenceBinnedSparse(m,z,1000,10.,1,0.01)
             
@@ -40,7 +40,7 @@ for m in tqdm(np.arange(150,5000,10)):
                     
                     # label
                     noise = [(mz,i,False) for (mz,i) in noise]
-
+                    #noise = [(mz,i,True) for (mz,i) in noise]
                     # concat lists
                     tuples += noise
                     
@@ -60,24 +60,26 @@ for m in tqdm(np.arange(150,5000,10)):
                     
                     # append on lists
                     for (mz,i,label) in sortedTup:
-                        xList.append(mz)
-                        yList.append(i)
-                        zList.append(z)
-                        monoList.append(m/z)
-                        labelList.append(label)
-                        scanList.append(scan)
+                        if mz > 150 and mz < 1999:
+                           xList.append(mz)
+                           yList.append(i)
+                           zList.append(z)
+                           monoList.append(m/z)
+                           labelList.append(label)
+                           scanList.append(scan)
 
                     scan +=1 
             for count in range(10):
                 # noise 
                 tuples = lib.createNoiseBinnedSparse(m,z,1000,10.,1,0.01)
                 for (mz,i) in tuples:
-                    xList.append(mz)
-                    yList.append(i)
-                    zList.append(z)
-                    monoList.append(m/z)
-                    labelList.append(False)
-                    scanList.append(scan)
+                    if mz > 150 and mz < 1999:
+                      xList.append(mz)
+                      yList.append(i)
+                      zList.append(z)
+                      monoList.append(m/z)
+                      labelList.append(False)
+                      scanList.append(scan)
 
                 scan +=1 
 
