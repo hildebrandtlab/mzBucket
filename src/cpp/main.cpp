@@ -16,20 +16,20 @@ int main(int argc, char *argv[]) {
 
     cxxopts::Options options("mzBucket", "Fast Cosim-Hashes for TimsTOF Spectra");
     options.add_options()
-        ("f,frameId", "frame number", cxxopts::value<int>()->default_value("1"))
-            ("w, windowlength", "length of subspectra(da)", cxxopts::value<double>()->default_value("10"))
-            ("o, overlapping", "whether windows overlap", cxxopts::value<std::string>()->default_value("true"))
-            ("k, AND", "number of ANDs", cxxopts::value<int>())
-            ("l, OR", "number of ORs", cxxopts::value<int>())
-            ("c, csvPath", "a csv file for testing", cxxopts::value<std::string>())
-            ("d, brukerDataSet", "path to bruker dataset", cxxopts::value<std::string>())
-            ("b, binaryPath", "path to bruker binary", cxxopts::value<std::string>())
-            ("n, normalize", "if true, norm(I) will be used", cxxopts::value<std::string>()->default_value("false"))
-            ("s, sqrt", "if true, sqrt norm will be used", cxxopts::value<std::string>()->default_value("false"))
-            ("t, threads", "number of threads", cxxopts::value<int>()->default_value("4"))
-            ("r, restricted", "whether collision is restricted", cxxopts::value<std::string>()->default_value("false"))
-            ("v, verbose", "whether output should be verbose", cxxopts::value<std::string>()->default_value("true"))
-            ("h, help", "Print usage");
+    ("f, frameId", "frame number", cxxopts::value<int>()->default_value("1"))
+    ("w, windowLength", "length of subspectra(da)", cxxopts::value<double>()->default_value("10"))
+    ("o, overlapping", "whether windows overlap", cxxopts::value<std::string>()->default_value("true"))
+    ("k, AND", "number of ANDs", cxxopts::value<int>())
+    ("l, OR", "number of ORs", cxxopts::value<int>())
+    ("c, csvPath", "a csv file for testing", cxxopts::value<std::string>())
+    ("d, brukerDataSet", "path to bruker dataset", cxxopts::value<std::string>())
+    ("b, binaryPath", "path to bruker binary", cxxopts::value<std::string>())
+    ("n, normalize", "if true, norm(I) will be used", cxxopts::value<std::string>()->default_value("false"))
+    ("s, sqrt", "if true, sqrt norm will be used", cxxopts::value<std::string>()->default_value("false"))
+    ("t, threads", "number of threads", cxxopts::value<int>()->default_value("4"))
+    ("r, restricted", "whether collision is restricted", cxxopts::value<std::string>()->default_value("false"))
+    ("v, verbose", "whether output should be verbose", cxxopts::value<std::string>()->default_value("true"))
+    ("h, help", "Print usage");
 
     auto result = options.parse(argc, argv);
 
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
     }
 
     int frameId = result["frameId"].as<int>();
-    double windowlength = result["windowlength"].as<double>();
+    double windowLength = result["windowLength"].as<double>();
     std::string overlappingS = result["overlapping"].as<std::string>();
     std::string normalizeS = result["normalize"].as<std::string>();
     std::string sqrtS = result["sqrt"].as<std::string>();
@@ -166,7 +166,12 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        auto checkSet = getHashes(specMap, numThreads, windowlength, overlapping, l, k, normalize, sqrt, restricted, verbose);
+        auto checkSet = getHashes(specMap, numThreads, windowLength, overlapping, l, k, normalize, sqrt, restricted, verbose);
+
+        int tp = 0;
+        int fp = 0;
+        int fn = 0;
+        int tn = 0;
 
         for(auto peak_id = 0; peak_id < mzs.size(); peak_id++){
 
@@ -174,45 +179,56 @@ int main(int argc, char *argv[]) {
            auto mz = mzs[peak_id];
            auto i = intensitys[peak_id];
 
-           auto bin = int(floor(mzs[peak_id] / windowlength));
-           auto oeBin = -int(floor(((mzs[peak_id] + windowlength / 2.0) / windowlength)));
+           auto bin = int(floor(mzs[peak_id] / windowLength));
+           auto oeBin = -int(floor(((mzs[peak_id] + windowLength / 2.0) / windowLength)));
 
            if(hasValue(checkSet, scan)){
                auto s = checkSet[scan];
                if(s.count(bin) > 0 || s.count(oeBin) > 0){
-                   la.push_back(labels[peak_id]);
+
+                   // TRUE POSITIVE
+                   if(labels[peak_id] == "True"){
+                       tp++;
+                   }
+                   // FALSE POSITIVE
+                   else {
+                       fp++;
+                   }
+               }
+               // peak did not collide
+               else{
+                   // FALSE NEGATIVE
+                   if(labels[peak_id] == "True"){
+                       fn++;
+                   }
+                   // TRUE NEGATIVE
+                   else {
+                       tn++;
+                   }
+               }
+           }
+           // peak did not collide
+           else{
+               // FALSE NEGATIVE
+               if(labels[peak_id] == "True"){
+                   fn++;
+               }
+                   // TRUE NEGATIVE
+               else {
+                   tn++;
                }
            }
         }
 
-       auto tCounter = 0;
-       auto fCounter = 0;
-
-       auto tCounterReal = 0;
-       auto fCounterReal = 0;
-
-       for(const auto s: labels){
-           if(s == "True")
-               tCounterReal += 1;
-           else
-               fCounterReal += 1;
-       }
-
-       for(const auto s: la){
-           if(s == "True")
-               tCounter += 1;
-           else
-               fCounter += 1;
-       }
-
        if(verbose){
-           std::cout << "Real True: " << tCounterReal << " | Real False: " << fCounterReal << std::endl;
-           std::cout << "Pred True: " << tCounter << " | Pred False: " << fCounter << std::endl;
+           std::cout << "TP: " << tp << " | TN: " << tn << std::endl;
+           std::cout << "FP: " << fp << " | FN: " << fn << std::endl;
+           std::cout << "PEAKS TOTAL    : " << mzs.size() << std::endl;
+           std::cout << "PREDICTED TOTAL: " << tp + tn + fp + fn << std::endl;
        }
 
        else {
-           std::cout << tCounterReal << " " << fCounterReal << " " << tCounter << " " << fCounter << std::endl;
-           std::cout << "//" << "tCounterReal" << " " << "fCounterReal" << " " << "tCounter" << " " << "fCounter" << std::endl;
+           std::cout << tp << " " << tn << " " << fp << " " << fn << std::endl;
        }
    }
    else{
@@ -257,7 +273,7 @@ int main(int argc, char *argv[]) {
            }
        }
 
-       auto checkSet = getHashes(specMap, numThreads, windowlength, overlapping, l, k, normalize, sqrt, restricted, verbose);
+       auto checkSet = getHashes(specMap, numThreads, windowLength, overlapping, l, k, normalize, sqrt, restricted, verbose);
 
        std::vector<double> mzValues;
        std::vector<int> intens;
@@ -271,8 +287,8 @@ int main(int argc, char *argv[]) {
                auto mz = mzs[peak_id];
                auto i = mzs[peak_id];
 
-               auto bin = int(floor(mzs[peak_id] / windowlength));
-               auto oeBin = -int(floor(((mzs[peak_id] + windowlength / 2.0) / windowlength)));
+               auto bin = int(floor(mzs[peak_id] / windowLength));
+               auto oeBin = -int(floor(((mzs[peak_id] + windowLength / 2.0) / windowLength)));
 
                if(hasValue(checkSet, scan)){
                    auto s = checkSet[scan];
