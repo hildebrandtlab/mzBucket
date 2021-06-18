@@ -101,7 +101,7 @@ std::map<int, MzSpectrum> groupToWindows(const MzSpectrum& spec, double windowLe
 
     for(const auto& [bin, spectrum]: splits){
         if(spec.mz.size() >= minNumPeaks){
-            auto it = max_element(std::begin(spectrum.intensity), std::end(spectrum.intensity));
+            auto it = *max_element(std::begin(spectrum.intensity), std::end(spectrum.intensity));
             if(it >= minIntensity)
                 retSplits[bin] = spectrum;
         }
