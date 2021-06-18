@@ -167,7 +167,8 @@ bool containsKeyMultiple(const std::vector<int>& keys, const std::map<int, bool>
  * @param l
  */
 std::map<int, std::set<int>> getHashes(const std::map<int, MzSpectrum>& specMap, int numThreads, double windowLength,
-                                       bool overlapping, int k, int l, bool normalize, bool sqr, bool restricted, bool verbose) {
+                                       bool overlapping, int k, int l, bool normalize, bool sqr, bool restricted,
+                                       bool verbose, int minNumPeaks, int minIntensity) {
     std::vector<std::pair<int, MzSpectrum>> mzSpectra;
     mzSpectra.reserve(specMap.size());
 

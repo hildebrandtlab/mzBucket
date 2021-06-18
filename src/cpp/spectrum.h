@@ -43,9 +43,12 @@ bool hasValue(std::map<int, MzSpectrum>& windowCollection, int windowId){
  * @param spec: mz spectrum to split
  * @param windowLength: length in dalton a window should have
  * @param overlapping: if true, also windows shifted by half a window length will be generated
+ * @param minNumPeaks: minimum number of peaks that need to be present in a window
+ * @param minIntensity: minimum intensity a peak must have to be considered
  * @return : map of grouped spectrum into windows by: windowId, mz window
  */
-std::map<int, MzSpectrum> groupToWindows(const MzSpectrum& spec, double windowLength, bool overlapping=true){
+std::map<int, MzSpectrum> groupToWindows(const MzSpectrum& spec, double windowLength, bool overlapping=true,
+                                         int minNumPeaks=1, int minIntensity=1){
 
     std::map<int, MzSpectrum> splits;
 
@@ -93,7 +96,18 @@ std::map<int, MzSpectrum> groupToWindows(const MzSpectrum& spec, double windowLe
         }
         splits.merge(splitsOffset);
     }
-    return splits;
+
+    std::map<int, MzSpectrum> retSplits;
+
+    for(const auto& [bin, spectrum]: splits){
+        if(spec.mz.size() >= minNumPeaks){
+            auto it = max_element(std::begin(spectrum.intensity), std::end(spectrum.intensity));
+            if(it >= minIntensity)
+                retSplits[bin] = spectrum;
+        }
+    }
+
+    return retSplits;
 }
 
 /**
