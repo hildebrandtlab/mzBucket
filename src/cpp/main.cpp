@@ -19,6 +19,8 @@ int main(int argc, char *argv[]) {
     ("f, frameId", "frame number", cxxopts::value<int>()->default_value("1"))
     ("w, windowLength", "length of subspectra(da)", cxxopts::value<double>()->default_value("10"))
     ("o, overlapping", "whether windows overlap", cxxopts::value<std::string>()->default_value("true"))
+    ("i, minIntensity", "minimum intensity in window", cxxopts::value<int>()->default_value("1"))
+    ("m, minNumPeaks", "minimum number peaks in window", cxxopts::value<int>()->default_value("1"))
     ("k, AND", "number of ANDs", cxxopts::value<int>())
     ("l, OR", "number of ORs", cxxopts::value<int>())
     ("c, csvPath", "a csv file for testing", cxxopts::value<std::string>())
@@ -29,8 +31,6 @@ int main(int argc, char *argv[]) {
     ("t, threads", "number of threads", cxxopts::value<int>()->default_value("4"))
     ("r, restricted", "whether collision is restricted", cxxopts::value<std::string>()->default_value("false"))
     ("v, verbose", "whether output should be verbose", cxxopts::value<std::string>()->default_value("true"))
-    ("i, minIntensity", "minimum intensity in window", cxxopts::value<int>()->default_value("1"))
-    ("m, minNumPeaks", "minimum number peaks in window", cxxopts::value<int>()->default_value("1"))
     ("h, help", "Print usage");
 
     auto result = options.parse(argc, argv);
@@ -98,11 +98,11 @@ int main(int argc, char *argv[]) {
         std::cout << "______________________________" << std::endl;
         std::cout << "window length(dalton): " << windowLength << std::endl;
         std::cout << "windows overlap      : " << overlappingS << std::endl;
+        std::cout << "minimum number peaks : " << minNumPeaks << std::endl;
+        std::cout << "normalize intensities: " << normalizeS << std::endl;
         std::cout << "number of ANDs       : " << k << std::endl;
         std::cout << "number of ORs        : " << l << std::endl;
         std::cout << "minimum intensity    : " << minIntensity << std::endl;
-        std::cout << "minimum number peaks : " << minNumPeaks << std::endl;
-        std::cout << "normalize intensities: " << normalizeS << std::endl;
         if (normalize)
             if(sqrt)
                 std::cout << "normalize function   : " << "SQRT" << std::endl;
