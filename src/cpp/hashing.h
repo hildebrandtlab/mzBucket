@@ -50,9 +50,12 @@ std::string boolVectorToString(const std::vector<bool> &boolVector, int bin, boo
     for(const auto& b: boolVector)
         b ? ret.append("1") : ret.append("0");
 
+    // this is a hard restriction to its on mass bin only for collision
     if(restricted)
         ret.append(std::to_string(bin));
-
+    // this is a soft restriction to all windows with same offset
+    else
+        bin > 0 ? ret.append("1") else ret.append("0")
     return ret;
 }
 
