@@ -29,6 +29,8 @@ int main(int argc, char *argv[]) {
     ("t, threads", "number of threads", cxxopts::value<int>()->default_value("4"))
     ("r, restricted", "whether collision is restricted", cxxopts::value<std::string>()->default_value("false"))
     ("v, verbose", "whether output should be verbose", cxxopts::value<std::string>()->default_value("true"))
+    ("i, minIntensity", "minimum intensity in window", cxxopts::value<int>()->default_value("1"))
+    ("m, minNumPeaks", "minimum number peaks in window", cxxopts::value<int>()->default_value("1"))
     ("h, help", "Print usage");
 
     auto result = options.parse(argc, argv);
@@ -50,6 +52,10 @@ int main(int argc, char *argv[]) {
     }
 
     int frameId = result["frameId"].as<int>();
+
+    int minNumPeaks = result["minNumPeaks"].as<int>();
+    int minIntensity = result["minIntensity"].as<int>();
+
     double windowLength = result["windowLength"].as<double>();
     std::string overlappingS = result["overlapping"].as<std::string>();
     std::string normalizeS = result["normalize"].as<std::string>();
@@ -94,6 +100,8 @@ int main(int argc, char *argv[]) {
         std::cout << "windows overlap      : " << overlappingS << std::endl;
         std::cout << "number of ANDs       : " << k << std::endl;
         std::cout << "number of ORs        : " << l << std::endl;
+        std::cout << "minimum intensity    : " << minIntensity << std::endl;
+        std::cout << "minimum number peaks : " << minNumPeaks << std::endl;
         std::cout << "normalize intensities: " << normalizeS << std::endl;
         if (normalize)
             if(sqrt)
