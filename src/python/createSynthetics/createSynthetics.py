@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -25,8 +26,8 @@ for m in tqdm(np.arange(150,5000,10)):
     for z in np.arange(1,5):
         if m/z > 150 and m/z < 1999:
             # signal
-            signal = lib.createReferenceBinnedSparse(m,z,1000,10.,1,0.01)
-            
+            #signal = lib.createReferenceBinnedSparse(m,z,1000,10.,1,0.01)
+            signal = lib.isoStick(m,z)
             # label
             signalLabeled = [ (mz,i,True) for (mz,i) in signal]
 
