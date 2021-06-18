@@ -99,10 +99,10 @@ int main(int argc, char *argv[]) {
         std::cout << "window length(dalton): " << windowLength << std::endl;
         std::cout << "windows overlap      : " << overlappingS << std::endl;
         std::cout << "minimum number peaks : " << minNumPeaks << std::endl;
-        std::cout << "normalize intensities: " << normalizeS << std::endl;
+        std::cout << "minimum intensity    : " << minIntensity << std::endl;
         std::cout << "number of ANDs       : " << k << std::endl;
         std::cout << "number of ORs        : " << l << std::endl;
-        std::cout << "minimum intensity    : " << minIntensity << std::endl;
+        std::cout << "normalize intensities: " << normalizeS << std::endl;
         if (normalize)
             if(sqrt)
                 std::cout << "normalize function   : " << "SQRT" << std::endl;
