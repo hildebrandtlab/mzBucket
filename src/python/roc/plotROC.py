@@ -29,6 +29,8 @@ dpi = 300
 # -----------------------------------------------
 
 inFile = sys.argv[1]
+outFile = sys.argv[2]
+
 dfLSH = pd.read_csv(inFile)
 print(dfLSH)
 
@@ -50,5 +52,5 @@ plt.title("Classification results for different $m$ and $n$.",size=BIGGER_SIZE);
 for i,k in enumerate(keys):
         plt.text(fprVals[i],tprVals[i],k)
         plt.tight_layout()
-        plt.savefig("ROC.pdf",dpi=dpi)
+        plt.savefig(outFile,dpi=dpi)
 
