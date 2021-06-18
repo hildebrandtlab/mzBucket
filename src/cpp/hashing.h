@@ -217,7 +217,7 @@ std::map<int, std::set<int>> getHashes(const std::map<int, MzSpectrum>& specMap,
     // windows generation
     #pragma omp parallel for num_threads(numThreads)
     for(int i = 0; i < specMap.size(); i++){
-        auto windowCollection = groupToWindows(mzSpectraBinned[i].second, windowLength, overlapping);
+        auto windowCollection = groupToWindows(mzSpectraBinned[i].second, windowLength, overlapping, minNumPeaks, minIntensity);
         binnedWindows[i] = {mzSpectraBinned[i].first, windowCollection};
     }
 
