@@ -195,22 +195,22 @@ int main(int argc, char *argv[]) {
                if(s.count(bin) > 0 || s.count(oeBin) > 0){
 
                    // TRUE POSITIVE
-                   if(labels[peak_id] == "True"){
+                   if(labels[peak_id] == "signal"){
                        tp++;
                    }
                    // FALSE POSITIVE
-                   else {
+                   else if(labels[peak_id] == "noise_1") {
                        fp++;
                    }
                }
                // peak did not collide
                else{
                    // FALSE NEGATIVE
-                   if(labels[peak_id] == "True"){
+                   if(labels[peak_id] == "signal"){
                        fn++;
                    }
                    // TRUE NEGATIVE
-                   else {
+                   else if(labels[peak_id] == "noise_1") {
                        tn++;
                    }
                }
@@ -218,11 +218,11 @@ int main(int argc, char *argv[]) {
            // peak did not collide
            else{
                // FALSE NEGATIVE
-               if(labels[peak_id] == "True"){
+               if(labels[peak_id] == "signal"){
                    fn++;
                }
                    // TRUE NEGATIVE
-               else {
+               else if (labels[peak_id] == "noise_1") {
                    tn++;
                }
            }
