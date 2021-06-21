@@ -21,8 +21,8 @@ def iso(x,m,z,sigma):
 def isoStick(m,z):
     peakX = [(m+k)/z for k in np.arange(6)]
     peakY = [weight(m,k) for k in np.arange(6)]
-
-    return [(mz,i) for (mz,i) in zip(peakX,peakY)]
+    maxInt = np.max(peakY)
+    return [(mz,i/maxInt) for (mz,i) in zip(peakX,peakY)]
 
 def createReferenceBinnedSparse(m,z,NumBinsInit,WindowlengthInit,ResTarget,ResAvg):
     mz = m / z    
