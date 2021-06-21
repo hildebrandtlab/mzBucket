@@ -17,7 +17,8 @@ def getNoiseEstimate(yList):
     return sigma
 
 inFile = sys.argv[1]
-outFile = sys.argv[2]
+outFileCSV = sys.argv[2]
+outFilePlot = sys.argv[3]
 
 df = pd.read_csv(inFile)
 print(df)
@@ -42,6 +43,7 @@ fpr, tpr, thresholds = roc_curve(y_true=df.yTrue.values,y_score=df.SNR.values)
 
 dfROC = pd.DataFrame.from_dict({'tpr':tpr,'fpr':fpr,'t':thresholds})
 print(dfROC)
+dfROC.to_csv(outFileCSV,index=False)
 
 widthMM = 170
 widthInch = widthMM / 25.4
@@ -79,5 +81,5 @@ plt.ylabel("True positive rate",size=MEDIUM_SIZE)
 
 #plt.legend()
 plt.tight_layout()
-plt.savefig(outFile,dpi=dpi)
+plt.savefig(outFilePlot,dpi=dpi)
 
