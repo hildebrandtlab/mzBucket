@@ -23,18 +23,19 @@ df = pd.read_csv(inFile)
 print(df)
 
 # Calculate noise estimate on windows
-windowDF = df[['scan','intensity']].groupby('scan',as_index=False).agg(list)
+windowDF = df[['scan','i']].groupby('scan',as_index=False).agg(list)
 print(windowDF)
 
-windowDF['sigma'] = windowDF.apply(lambda r: getNoiseEstimate(r['intensity']),axis=1)
+windowDF['sigma'] = windowDF.apply(lambda r: getNoiseEstimate(r['i']),axis=1)
 print(windowDF)
 
 dictSigma = {k:v for (k,v) in zip(list(windowDF.scan.values),list(windowDF.sigma.values))}
 
-df['sigma'] = df.apply(lambda r:dictSigma[r['scan']],axis=1)
+df['sigma'] = 1 # df.apply(lambda r:dictSigma[r['scan']],axis=1)
 df['yTrue'] = df.apply(lambda r:1 if r['label'] else 0,axis=1)
-df['SNR'] = df['intensity'] / df['sigma']
-
+df['SNR'] = df['sigma'] / df['i'] #df['i'] / df['sigma']
+df.replace([np.inf, -np.inf], np.nan, inplace=True)
+df = df.dropna(subset=["SNR"], how="all")
 print(df)
 
 fpr, tpr, thresholds = roc_curve(y_true=df.yTrue.values,y_score=df.SNR.values)
@@ -73,7 +74,7 @@ plt.step(tpr,fpr)
 plt.xlim([0,1])
 plt.ylim([0,1])
 plt.plot(np.linspace(0,1),np.linspace(0,1),'--',alpha=0.5)
-plt.xlabel("False postive rate",size=MEDIUM_SIZE)
+plt.xlabel("False positive rate",size=MEDIUM_SIZE)
 plt.ylabel("True positive rate",size=MEDIUM_SIZE)
 
 #plt.legend()

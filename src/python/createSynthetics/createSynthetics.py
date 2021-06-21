@@ -24,6 +24,13 @@ scanList = []
 
 relInt = [0.5,1,0.5]
 
+
+# labels:
+# "noise_1" -- noise in a window without an isotope pattern inside
+# "noise_2" -- noise in a window with	 an isotope pattern inside
+# "signal"  -- true signal
+#
+
 scan = 0
 for m in tqdm(np.arange(150,5000,10)):
     for z in np.arange(1,5):
