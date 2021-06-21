@@ -11,9 +11,8 @@ from itertools import groupby
 from functools import reduce
 
 scale = float(sys.argv[1])
-labelNoise = True if sys.argv[2].lower() == "true" else False
-numPeaksNoise = int(sys.argv[3])  
-outFile = sys.argv[4]
+numPeaksNoise = int(sys.argv[2])  
+outFile = sys.argv[3]
 
 xList = []
 yList = []
@@ -31,6 +30,13 @@ relInt = [0.5,1,0.5]
 # "signal"  -- true signal
 #
 
+l_n1 = "noise_1"
+l_n2 = "noise_2"
+l_sig = "signal"
+
+def addLabel(l1,l2):
+    return l_sig if ((l1 == l_sig) or (l2 == l_sig)) else l_n2
+
 scan = 0
 for m in tqdm(np.arange(150,5000,10)):
     for z in np.arange(1,5):
@@ -40,7 +46,7 @@ for m in tqdm(np.arange(150,5000,10)):
             signal = lib.isoStick(m,z)
           
             # label
-            signalLabeled = [ (mz,scale*i,True) for (mz,i) in signal]
+            signalLabeled = [ (mz,scale*i,l_sig) for (mz,i) in signal]
 
             if len(signal) > 0:
                 for count in range(3):
@@ -52,7 +58,7 @@ for m in tqdm(np.arange(150,5000,10)):
                     
                     # label
                     #noise = [(mz,i,False) for (mz,i) in noise]
-                    noise = [(mz,i,labelNoise) for (mz,i) in noise]
+                    noise = [(mz,i,l_n2) for (mz,i) in noise]
                     # concat lists
                     signalMod += noise
                     
@@ -64,7 +70,7 @@ for m in tqdm(np.arange(150,5000,10)):
                         grouped.append(\
                                 (float(mzKey/1000),\
                                 reduce(lambda i1, i2: i1 + i2, [ i for (mz,i,l) in listVal]),\
-                                reduce(lambda lab1, lab2: lab1 or lab2, [ l for (mz,i,l) in listVal]))\
+                                reduce(lambda lab1, lab2: addLabel(lab1,lab2), [ l for (mz,i,l) in listVal]))\
                                 )
                     
                     # sort by
@@ -90,7 +96,7 @@ for m in tqdm(np.arange(150,5000,10)):
                       yList.append(i)
                       zList.append(z)
                       monoList.append(m/z)
-                      labelList.append(False)
+                      labelList.append(l_n1)
                       scanList.append(scan)
 
                 scan +=1 

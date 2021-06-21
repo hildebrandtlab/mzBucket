@@ -32,7 +32,7 @@ print(windowDF)
 dictSigma = {k:v for (k,v) in zip(list(windowDF.scan.values),list(windowDF.sigma.values))}
 
 df['sigma'] = 1 # df.apply(lambda r:dictSigma[r['scan']],axis=1)
-df['yTrue'] = df.apply(lambda r:1 if r['label'] else 0,axis=1)
+df['yTrue'] = df.apply(lambda r:1 if r['label'] == "signal" else 0,axis=1)
 df['SNR'] = df['sigma'] / df['i'] #df['i'] / df['sigma']
 df.replace([np.inf, -np.inf], np.nan, inplace=True)
 df = df.dropna(subset=["SNR"], how="all")
