@@ -32,12 +32,12 @@ def createReferenceBinnedSparse(m,z,NumBinsInit,WindowlengthInit,ResTarget,ResAv
     return Spectrum(axis,intens).bin_to_resolution(ResTarget,min_intensity=1)
     
         
-def createNoiseBinnedSparse(m,z,NumBinsInit,WindowlengthInit,ResTarget,ResAvg):
+def createNoiseBinnedSparse(m,z,NumBinsInit,WindowlengthInit,ResTarget,ResAvg,mu):
     mz = m / z    
     axis = np.linspace(mz-0.5*WindowlengthInit,mz+0.5*WindowlengthInit,num=NumBinsInit)
     
     # number peaks
-    numPeaks = int(poisson.rvs(mu=1,size=1)[0])+1
+    numPeaks = int(poisson.rvs(mu=mu,size=1)[0])+1
     
     # peak locations
     loc = np.sort(randint.rvs(low=0,high=axis.size,size=numPeaks))
