@@ -43,3 +43,6 @@
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
+
+# temporary files
+*.csv_tmp

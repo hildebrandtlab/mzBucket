@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -9,7 +10,10 @@ import sys
 from itertools import groupby
 from functools import reduce
 
-outFile = sys.argv[1]
+scale = float(sys.argv[1])
+labelNoise = True if sys.argv[2].lower() == "true" else False
+numPeaksNoise = int(sys.argv[3])  
+outFile = sys.argv[4]
 
 xList = []
 yList = []
@@ -20,15 +24,23 @@ scanList = []
 
 relInt = [0.5,1,0.5]
 
+
+# labels:
+# "noise_1" -- noise in a window without an isotope pattern inside
+# "noise_2" -- noise in a window with	 an isotope pattern inside
+# "signal"  -- true signal
+#
+
 scan = 0
 for m in tqdm(np.arange(150,5000,10)):
     for z in np.arange(1,5):
         if m/z > 150 and m/z < 1999:
             # signal
-            signal = lib.createReferenceBinnedSparse(m,z,1000,10.,1,0.01)
-            
+            #signal = lib.createReferenceBinnedSparse(m,z,1000,10.,1,0.01)
+            signal = lib.isoStick(m,z)
+          
             # label
-            signalLabeled = [ (mz,i,True) for (mz,i) in signal]
+            signalLabeled = [ (mz,scale*i,True) for (mz,i) in signal]
 
             if len(signal) > 0:
                 for count in range(3):
@@ -36,11 +48,11 @@ for m in tqdm(np.arange(150,5000,10)):
                     signalMod = [ (mz,i*relInt[count],l) for (mz,i,l) in signalLabeled]
 
                     # adding noise 
-                    noise = lib.createNoiseBinnedSparse(m,z,1000,10.,1,0.01)
+                    noise = lib.createNoiseBinnedSparse(m,z,1000,10.,1,0.01,numPeaksNoise)
                     
                     # label
-                    noise = [(mz,i,False) for (mz,i) in noise]
-                    #noise = [(mz,i,True) for (mz,i) in noise]
+                    #noise = [(mz,i,False) for (mz,i) in noise]
+                    noise = [(mz,i,labelNoise) for (mz,i) in noise]
                     # concat lists
                     signalMod += noise
                     
@@ -71,7 +83,7 @@ for m in tqdm(np.arange(150,5000,10)):
                     scan +=1 
             for count in range(10):
                 # noise 
-                noise = lib.createNoiseBinnedSparse(m,z,1000,10.,1,0.01)
+                noise = lib.createNoiseBinnedSparse(m,z,1000,10.,1,0.01,numPeaksNoise)
                 for (mz,i) in noise:
                     if mz > 150 and mz < 1999:
                       xList.append(mz)
