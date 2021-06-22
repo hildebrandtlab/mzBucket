@@ -8,14 +8,9 @@
 #include <iostream>
 #include <cassert>
 #include <random>
-//#include "/home/administrator/Documents/promotion/eigen/Eigen/Dense"
-//#include "/home/administrator/Documents/promotion/eigen/Eigen/Sparse"
 
-//#include "/Users/davidteschner/Documents/promotion/eigen/Eigen/Dense"
-//#include "/Users/davidteschner/Documents/promotion/eigen/Eigen/Sparse"
-
-#include "/home/dateschn/eigen/Eigen/Dense"
-#include "/home/dateschn/eigen/Eigen/Sparse"
+#include "../../../eigen/Eigen/Dense"
+#include "../../../eigen/Eigen/Sparse"
 
 #define assertm(exp, msg) assert(((void)msg, exp))
 
