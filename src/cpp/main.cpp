@@ -159,7 +159,6 @@ int main(int argc, char *argv[]) {
         file.close();
 
         std::map<int, MzSpectrum> specMap;
-        std::vector<std::string> la;
 
         for(auto peak_id = 0; peak_id < scans.size(); peak_id++){
             auto scan = scans[peak_id];
