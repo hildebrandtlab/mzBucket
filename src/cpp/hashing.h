@@ -27,7 +27,7 @@
  */
 Eigen::SparseVector<double> toSparseVector(const MzVector& mzVector, int numRows){
 
-    auto sparseVec = Eigen::SparseMatrix<double>(numRows, 1);
+    Eigen::SparseMatrix<double> sparseVec = Eigen::SparseMatrix<double>(numRows, 1);
 
     std::vector<Eigen::Triplet<double>> tripletList;
     tripletList.reserve(mzVector.indices.size());
