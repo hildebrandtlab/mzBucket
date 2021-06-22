@@ -9,8 +9,8 @@
 #include "cxxopts.hpp"
 #include "spectrum.h"
 #include "hashing.h"
-#include </home/dateschn/opentims/opentims++/opentims_all.cpp>
-//#include </Users/davidteschner/Documents/promotion/opentims/opentims++/opentims_all.cpp>
+
+#include "../../../opentims/opentims++/opentims_all.cpp"
 
 int main(int argc, char *argv[]) {
 
