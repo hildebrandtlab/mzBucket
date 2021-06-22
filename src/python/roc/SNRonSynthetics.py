@@ -17,7 +17,8 @@ def getNoiseEstimate(yList):
     return sigma
 
 inFile = sys.argv[1]
-outFile = sys.argv[2]
+outFileCSV = sys.argv[2]
+outFilePlot = sys.argv[3]
 
 df = pd.read_csv(inFile)
 print(df)
@@ -32,7 +33,7 @@ print(windowDF)
 dictSigma = {k:v for (k,v) in zip(list(windowDF.scan.values),list(windowDF.sigma.values))}
 
 df['sigma'] = 1 # df.apply(lambda r:dictSigma[r['scan']],axis=1)
-df['yTrue'] = df.apply(lambda r:1 if r['label'] else 0,axis=1)
+df['yTrue'] = df.apply(lambda r:1 if r['label'] == "signal" else 0,axis=1)
 df['SNR'] = df['sigma'] / df['i'] #df['i'] / df['sigma']
 df.replace([np.inf, -np.inf], np.nan, inplace=True)
 df = df.dropna(subset=["SNR"], how="all")
@@ -42,6 +43,7 @@ fpr, tpr, thresholds = roc_curve(y_true=df.yTrue.values,y_score=df.SNR.values)
 
 dfROC = pd.DataFrame.from_dict({'tpr':tpr,'fpr':fpr,'t':thresholds})
 print(dfROC)
+dfROC.to_csv(outFileCSV,index=False)
 
 widthMM = 170
 widthInch = widthMM / 25.4
@@ -79,5 +81,5 @@ plt.ylabel("True positive rate",size=MEDIUM_SIZE)
 
 #plt.legend()
 plt.tight_layout()
-plt.savefig(outFile,dpi=dpi)
+plt.savefig(outFilePlot,dpi=dpi)
 
