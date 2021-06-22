@@ -38,7 +38,6 @@ ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
 ax.set_yscale('log')
 ax.set_xscale('log')
-plt.title("Scalability for different $m$ and $n$.",size=BIGGER_SIZE);
 
 sns.scatterplot(data=df,x='numThreads',y='runTimeSec',hue='Amplification',style='Amplification')
 
