@@ -30,13 +30,17 @@ outfile = sys.argv[2]
 
 # run parameters
 ampParameters = [(30, 25),(30, 28),(30, 30),(30, 22),(30, 32),(30, 38),(30, 45),(30, 64)]
-#ampParameters = [(30,25)]
+flip = True
+if flip:
+   flipped = [(k,l) for (l,k) in ampParameters]	
+   ampParameters += flipped
 
 # store results
 kList = []
 lList = []
 tprList = []
 fprList = []
+
 for (l,k) in tqdm(ampParameters):
     (tp,fp,tn,fn) = run(l,k,inFile) 
  

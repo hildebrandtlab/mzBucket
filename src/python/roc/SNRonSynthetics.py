@@ -39,6 +39,10 @@ df.replace([np.inf, -np.inf], np.nan, inplace=True)
 df = df.dropna(subset=["SNR"], how="all")
 print(df)
 
+df = df[df['label'] != "noise_2"]
+
+print(df)
+
 fpr, tpr, thresholds = roc_curve(y_true=df.yTrue.values,y_score=df.SNR.values)
 
 dfROC = pd.DataFrame.from_dict({'tpr':tpr,'fpr':fpr,'t':thresholds})
