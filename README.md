@@ -3,6 +3,7 @@ Locality-sensitive hashing for mass spectrometry data.
 
 ## Contents
 This repository is structured as follows:
+``` bash
 .
 ├── bin
 ├── data
@@ -17,7 +18,7 @@ This repository is structured as follows:
         ├── meta
         ├── roc
         └── scalability
-
+```
 ## Build
 ### Batteries included?
 A binary that was compiled on a Ubuntu 20.04 LTS machine with two Intel Xeon Gold 6238 CPUs is provided. 
