@@ -9,8 +9,8 @@
 #include <cassert>
 #include <random>
 
-#include "../../../eigen/Eigen/Dense"
-#include "../../../eigen/Eigen/Sparse"
+#include "Eigen/Dense"
+#include "Eigen/Sparse"
 
 #define assertm(exp, msg) assert(((void)msg, exp))
 
