@@ -5,14 +5,12 @@ Locality-sensitive hashing for mass spectrometry data.
 This repository is structured as follows:
 ``` bash
 .
-├── bin
 ├── data
 │   ├── output_create_synthetics
 │   ├── output_roc
 │   └── output_scalability_study
 ├── plots
 └── src
-    ├── cpp
     └── python
         ├── createSynthetics
         ├── meta
@@ -20,8 +18,8 @@ This repository is structured as follows:
         └── scalability
 ```
 ## Build
-### Batteries included?
-A binary that was compiled on a Ubuntu 20.04 LTS machine with two Intel Xeon Gold 6238 CPUs is provided. 
+
+
 ### Dependencies
 The project depends on [eigen](https://gitlab.com/libeigen/eigen) and [opentims](https://github.com/michalsta/opentims).
 ### Build process
