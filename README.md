@@ -30,3 +30,6 @@ Then go to the folder opentims++ in the opentims repo and run `make`. This shoul
 Copy both files to /src/cpp/ in the mzBucket repo.
 
 Finally run `make` in  /src/cpp/ in the mzBucket repo.
+
+## Data 
+The data set used is available for download [here](https://zenodo.org/record/5036526#.YlWE91xBw5l). Please unzip it into the data folder to ensure reproducible runs of the scripts.
