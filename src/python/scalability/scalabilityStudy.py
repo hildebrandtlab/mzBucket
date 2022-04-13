@@ -4,11 +4,12 @@ import pandas as pd
 import numpy as np
 import sys
 
-def run(numThreads,k,l):
+def run(numThreads,l,k):
+    percent = numThreads*100
     start = time.time()
-    # ./mzLSH -f 1009 -k 30 -l 30 -d /share/massSpec/bruker/dda/M210115_001_Slot1-1_1_850.d/ -b ~/timsj/src/main/resources/libtimsdata.so -t 32
-    runCommand = ["../mzLSH","-f","1009","-k","{}".format(k),"-l","{}".format(l),"-d","/share/massSpec/bruker/dda/M210115_001_Slot1-1_1_850.d/","-b","/home/bob/timsj/src/main/resources/libtimsdata.so","-t"]
-    runCommand.append("{}".format(numThreads))
+    #cpulimit -f -l 1000 -- python process_dataset.py ../../data/M210115_001_Slot1-1_1_850.d/ l k 
+    runCommand = ["cpulimit","-f","-l","{}".format(percent),"--","python","process_dataset.py","../../data/M210115_001_Slot1-1_1_850.d/","{}".format(l),"{}".format(k)]
+
     print(runCommand)
     subprocess.run(runCommand)
     end = time.time()
@@ -21,8 +22,9 @@ with open("{}_tmp".format(outfile), 'a') as the_file:
     the_file.write('numThreads,runTime,l,k\n')
 
 # run parameters
-numThreads = [2,4,8,16,32,64,88]
-ampParameters = [(30,64),(30,30),(30,22)]
+numThreads = [2,4,8,16,32,64,128]
+#ampParameters = [(30,64),(30,30),(30,22)] -> up to study #4
+ampParameters = [(32,64),(32,32),(16,32)]
 
 # store results
 runTime = []
@@ -43,5 +45,3 @@ for nt in np.flip(numThreads):
 df = pd.DataFrame.from_dict({'numThreads':threadsUsed,'runTimeSec':runTime,'k':kList,'l':lList})
 df.to_csv(outfile)
 print(df)
-
-
