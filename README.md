@@ -7,7 +7,6 @@ This repository is structured as follows:
 .
 ├── data
 │   ├── output_create_synthetics
-│   ├── output_roc
 │   └── output_scalability_study
 ├── plots
 └── src
