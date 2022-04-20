@@ -87,8 +87,8 @@ def get_roc_point(num_hashes,len_single_hash,s,b,F,df):
     
     return fpr,tpr
 
-ors_list = [128,64,32,16,8,4,2]
-ands_list = [2,4,8,16,32,64]
+ors_list = [64,32,16]
+ands_list = [16,32,64]
 
 # store results
 kList = []
@@ -131,10 +131,7 @@ def get_roc_thres(df_arg):
     # add sigma and SNR for each row in df, i.e. per peak
     df['sigma'] = df.apply(lambda r:dictSigma[r['scan']],axis=1) 
     df['SNR'] = df['i'] / df['sigma']
-    #df['sigma'] / df['i']
-    #df['SNR'] = df['i'] / df['sigma'] # commented out
-    
-
+   
     # remove pathological values    
     df.replace([np.inf, -np.inf], np.nan, inplace=True)
     df = df.dropna(subset=["SNR"], how="all")
@@ -144,9 +141,7 @@ def get_roc_thres(df_arg):
     
     # do not consider noise peaks within a pattern
     df = df[df['label'] != "noise_2"]
-    
-    #return df
-    
+      
     fpr, tpr, thresholds = roc_curve(y_true=df.yTrue.values,y_score=df.SNR.values,pos_label=1)
     return (fpr, tpr, thresholds)
 
@@ -168,8 +163,8 @@ keys = [(l,k) for (l,k) in zip( dfLSH['ands'].values, dfLSH['ors'].values)]
 plt.scatter(fprVals,tprVals,s=5,label="LSH")
 
 # Text 
-#texts = [plt.text(fprVals[i],tprVals[i],k) for i,k in enumerate(keys)]
-#adjust_text(texts, arrowprops=dict(arrowstyle='->', color='red'))
+texts = [plt.text(fprVals[i],tprVals[i],k) for i,k in enumerate(keys)]
+adjust_text(texts, arrowprops=dict(arrowstyle='->', color='red'))
 
 # SNR
 thres_fpr, thres_tpr,_ = res
