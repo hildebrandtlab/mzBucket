@@ -159,11 +159,11 @@ plt.title("Classification results for different $m$ and $n$.",size=BIGGER_SIZE);
 # LSH
 tprVals = dfLSH['tpr'].values
 fprVals = dfLSH['fpr'].values
-keys = [(l,k) for (l,k) in zip( dfLSH['ands'].values, dfLSH['ors'].values)]
+keys = [(n,m) for (n,m) in zip( dfLSH['ands'].values, dfLSH['ors'].values)]
 plt.scatter(fprVals,tprVals,s=5,label="LSH")
 
 # Text 
-texts = [plt.text(fprVals[i],tprVals[i],k) for i,k in enumerate(keys)]
+texts = [plt.text(fprVals[i],tprVals[i],(m,n)) for i,(n,m) in enumerate(keys)]
 adjust_text(texts, arrowprops=dict(arrowstyle='->', color='red'))
 
 # SNR
