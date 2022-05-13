@@ -17,18 +17,7 @@ This repository is structured as follows:
         └── scalability
 ```
 ## Build
-
-
-### Dependencies
-The project depends on [eigen](https://gitlab.com/libeigen/eigen) and [opentims](https://github.com/michalsta/opentims).
-### Build process
-First, clone both projects next to the mzBuild repo.
-
-Then go to the folder opentims++ in the opentims repo and run `make`. This should produce the files zstddeclib.o and sqlite3.o.
-
-Copy both files to /src/cpp/ in the mzBucket repo.
-
-Finally run `make` in  /src/cpp/ in the mzBucket repo.
+The implementation has been updated and shifted to the proteolizard framework, more precisely the components [pyproteolizard-data](https://github.com/theGreatHerrLebert/proteolizard-data) for data-access and [pyproteolizard-algorithm](https://github.com/theGreatHerrLebert/proteolizard-algorithm) for the LSH. See in the respective repositories for buils instructions. 
 
 ## Data 
 The data set used is available for download [here](https://zenodo.org/record/5036526#.YlWE91xBw5l). Please unzip it into the data folder to ensure reproducible runs of the scripts.
