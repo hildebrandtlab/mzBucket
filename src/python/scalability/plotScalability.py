@@ -13,6 +13,9 @@ df["Amplification"] = df["Amplification"].astype("category")
 df = df.sort_values('k')
 print(df)
 
+totalDurationMin = df.runTimeSec.sum()/60.
+print("Total duration of study in min: {}".format(totalDurationMin))
+
 widthMM = 170
 widthInch = widthMM / 25.4
 ratio = 0.66666
