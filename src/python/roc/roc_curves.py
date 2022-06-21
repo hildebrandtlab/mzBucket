@@ -1,9 +1,5 @@
 # Imports ---------------------------------------
 import sys
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
-
-import tensorflow as tf
 import numpy as np
 
 from proteolizarddata.data import PyTimsDataHandle, MzSpectrum, TimsFrame
@@ -151,8 +147,8 @@ res = get_roc_thres(df)
 # Plot results ---------------------------------------
 plt.xlim([0,1])
 plt.ylim([0,1])
-plt.plot(np.linspace(0,1),np.linspace(0,1),'--',alpha=0.5)
-plt.xlabel("False postive rate",size=MEDIUM_SIZE)
+plt.plot(np.linspace(0,1),np.linspace(0,1),'k--',alpha=0.5,label="Random guessing")
+plt.xlabel("False positive rate",size=MEDIUM_SIZE)
 plt.ylabel("True positive rate",size=MEDIUM_SIZE)
 plt.title("Classification results for different $m$ and $n$.",size=BIGGER_SIZE);
 
