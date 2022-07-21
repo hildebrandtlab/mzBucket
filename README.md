@@ -1,6 +1,9 @@
 # mzBucket
 Locality-sensitive hashing for mass spectrometry data.
 
+## Publication
+See [here](https://doi.org/10.1186/s12859-022-04833-5) for the corresponding publication.
+
 ## Contents
 This repository is structured as follows:
 ``` bash
